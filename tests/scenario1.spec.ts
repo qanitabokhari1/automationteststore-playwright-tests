@@ -6,6 +6,7 @@ import { CartPage } from '../pages/CartPage';
 import dotenv from 'dotenv';
 
 dotenv.config();
+dotenv.config({override: true});
 
 test.describe('Scenario 1: Complete E-commerce Flow', () => {
   test('Login → Home → Select Dove Brand → Add Newest Item to Cart → Verify Cart', async ({ page }) => {
