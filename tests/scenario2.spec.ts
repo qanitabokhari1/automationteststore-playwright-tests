@@ -5,6 +5,7 @@ import { ProductPage } from '../pages/ProductPage';
 import dotenv from 'dotenv';
 
 dotenv.config();
+dotenv.config({override: true});
 
 test.describe('Scenario 2: T-shirts and Shoes Shopping Flow', () => {
   test('Login → Apparel → T-shirts → Sort Low to High → Select Lowest → Shoes → Sort High to Low → Add Highest (Qty: 2) → Verify Cart', async ({ page }) => {
