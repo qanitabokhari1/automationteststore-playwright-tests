@@ -170,7 +170,7 @@ const SELECTORS = {
 ### **Installation**
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/qanitabokhari1/automationteststore-playwright-tests.git
 cd Playwright_Testing_Project
 
 # Install dependencies
