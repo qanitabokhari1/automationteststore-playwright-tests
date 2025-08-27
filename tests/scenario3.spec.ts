@@ -4,6 +4,7 @@ import { CartPage } from '../pages/CartPage';
 import dotenv from 'dotenv';
 
 dotenv.config();
+dotenv.config({override: true});
 
 test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () => {
   test('Home → Skincare Section → Count Sale/Out of Stock Items → Add Sale Items to Cart → Verify Cart', async ({ page }) => {
