@@ -3,6 +3,7 @@ import { LoginPage } from "../pages/LoginPage";
 import * as dotenv from "dotenv";
 
 dotenv.config();
+dotenv.config({override: true});
 
 const SELECTORS = {
   MEN_SECTION: '//*[@id="categorymenu"]/nav/ul/li[6]',
