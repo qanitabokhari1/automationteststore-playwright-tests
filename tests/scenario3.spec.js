@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { CartPage } from '../pages/CartPage';
-import dotenv from 'dotenv';
+const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
+const { CartPage } = require('../pages/CartPage');
+const dotenv = require('dotenv');
 
 dotenv.config();
 dotenv.config({override: true});
@@ -11,8 +11,8 @@ test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () =>
     const loginPage = new LoginPage(page);
     const cartPage = new CartPage(page);
 
-    const username = process.env.USERNAME || 'sharjeel';
-    const password = process.env.PASSWORD || 'ahmad12';
+    const username = process.env.USERNAME || 'Qanita12';
+    const password = process.env.PASSWORD || 'Qanita123';
 
     try {
       console.log('\n🚀 Starting Scenario 3: Skincare Section Testing');
@@ -113,4 +113,3 @@ test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () =>
   });
 
 });
-    

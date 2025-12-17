@@ -1,6 +1,6 @@
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import * as dotenv from "dotenv";
+const { test, expect } = require("@playwright/test");
+const { LoginPage } = require("../pages/LoginPage");
+const dotenv = require("dotenv");
 
 dotenv.config();
 dotenv.config({override: true});
@@ -8,17 +8,17 @@ dotenv.config({override: true});
 const SELECTORS = {
   MEN_SECTION: '//*[@id="categorymenu"]/nav/ul/li[6]',
   PRODUCT_CONTAINERS: '//*[@id="maincontainer"]/div/div/div/div/div[2]/div',
-  PRODUCT_NAME: (index: number) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[1]/div`,
-  OUT_OF_STOCK: (index: number) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[2]/div[3]/span`,
-  ADD_TO_CART: (index: number) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]//a[contains(text(),"Add to Cart")]`,
+  PRODUCT_NAME: (index) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[1]/div`,
+  OUT_OF_STOCK: (index) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[2]/div[3]/span`,
+  ADD_TO_CART: (index) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]//a[contains(text(),"Add to Cart")]`,
   CART_ITEM_NAME: '//*[@id="cart_checkout1"]/div/table/tbody/tr/td[2]/a'
-} as const;
+};
 
 const TIMEOUTS = {
   ELEMENT_VISIBLE: 10000,
   PAGE_LOAD: 15000,
   WAIT_AFTER_ACTION: 2000
-} as const;
+};
 
 const MESSAGES = {
   SCENARIO_START: "🚀 Starting Scenario 4: Men Section Testing",
@@ -30,15 +30,15 @@ const MESSAGES = {
   NO_PRODUCTS_FOUND: "⚠️ No products ending with M/m found at all",
   ALL_OUT_OF_STOCK: "⚠️ Found {count} products ending with M/m but all are out of stock",
   SCENARIO_SUCCESS: "🎉 SCENARIO 4 COMPLETED SUCCESSFULLY! 🎉"
-} as const;
+};
 
 test.describe("Scenario 4: Men Section Testing with XPath Selectors", () => {
   test("Home → Men Section → Add Product Ending with M to Cart → Verify Cart Item Ends with M", async ({
     page,
   }) => {
     const loginPage = new LoginPage(page);
-    const username = process.env.USERNAME || "sharjeel";
-    const password = process.env.PASSWORD || "ahmad12";
+    const username = process.env.USERNAME || "Qanita12";
+    const password = process.env.PASSWORD || "Qanita123";
 
     try {
       console.log(`\n${MESSAGES.SCENARIO_START}`);
@@ -71,14 +71,14 @@ test.describe("Scenario 4: Men Section Testing with XPath Selectors", () => {
   });
 });
 
-async function performLogin(loginPage: LoginPage, username: string, password: string): Promise<void> {
+async function performLogin(loginPage, username, password) {
   console.log("\n=== Step 1: Logging in to the website ===");
   await loginPage.navigateToLogin();
   await loginPage.login(username, password);
   console.log(MESSAGES.LOGIN_SUCCESS);
 }
 
-async function navigateToMenSection(page: any): Promise<void> {
+async function navigateToMenSection(page) {
   console.log("\n=== Step 2: Navigating to men section ===");
   const menLink = page.locator(SELECTORS.MEN_SECTION);
   await expect(menLink).toBeVisible({ timeout: TIMEOUTS.ELEMENT_VISIBLE });
@@ -89,7 +89,7 @@ async function navigateToMenSection(page: any): Promise<void> {
   await page.waitForTimeout(TIMEOUTS.WAIT_AFTER_ACTION);
   
   // Smooth scroll to center after men section loads
-  await page.evaluate((selector: string) => {
+  await page.evaluate((selector) => {
     const element = document.querySelector(selector);
     if (element) {
       element.scrollIntoView({ 
@@ -105,13 +105,7 @@ async function navigateToMenSection(page: any): Promise<void> {
   console.log(MESSAGES.MEN_SECTION_LOADED);
 }
 
-async function findAndAddProductEndingWithM(page: any): Promise<{
-  productName: string;
-  totalProducts: number;
-  foundMProducts: number;
-  outOfStockMProducts: number;
-  wasProductAdded: boolean;
-}> {
+async function findAndAddProductEndingWithM(page) {
   console.log('\n=== Step 3: Finding product ending with M ===');
   
   await page.waitForTimeout(TIMEOUTS.WAIT_AFTER_ACTION);
@@ -168,7 +162,7 @@ async function findAndAddProductEndingWithM(page: any): Promise<{
   return { productName, totalProducts, foundMProducts, outOfStockMProducts, wasProductAdded };
 }
 
-async function logAllProductNames(page: any, totalProducts: number): Promise<void> {
+async function logAllProductNames(page, totalProducts) {
   console.log("\n--- Debug: All product names ---");
   for (let i = 0; i < totalProducts; i++) {
     try {
@@ -185,11 +179,7 @@ async function logAllProductNames(page: any, totalProducts: number): Promise<voi
   }
 }
 
-async function processProductAtIndex(page: any, index: number): Promise<{
-  found: boolean;
-  name: string;
-  outOfStock: boolean;
-}> {
+async function processProductAtIndex(page, index) {
   const productNameElement = page.locator(SELECTORS.PRODUCT_NAME(index));
   
   if (!(await productNameElement.isVisible())) {
@@ -210,21 +200,21 @@ async function processProductAtIndex(page: any, index: number): Promise<{
   return { found: true, name, outOfStock: isOutOfStock };
 }
 
-async function addProductToCart(page: any, index: number, productName: string): Promise<void> {
+async function addProductToCart(page, index, productName) {
   const addToCartButton = page.locator(SELECTORS.ADD_TO_CART(index));
   await expect(addToCartButton).toBeVisible({ timeout: TIMEOUTS.ELEMENT_VISIBLE });
   await addToCartButton.click();
   console.log(`${MESSAGES.ADDED_TO_CART} "${productName}"`);
 }
 
-function logProductSearchSummary(totalProducts: number, foundMProducts: number, outOfStockMProducts: number): void {
+function logProductSearchSummary(totalProducts, foundMProducts, outOfStockMProducts) {
   console.log(`\n--- Summary ---`);
   console.log(`Total products found: ${totalProducts}`);
   console.log(`Products ending with M: ${foundMProducts}`);
   console.log(`Out of stock M products: ${outOfStockMProducts}`);
 }
 
-async function verifyCartContents(page: any, productName: string): Promise<void> {
+async function verifyCartContents(page, productName) {
   console.log("\n=== Step 4: Verifying cart contents ===");
 
   await page.goto(
@@ -247,7 +237,7 @@ async function verifyCartContents(page: any, productName: string): Promise<void>
   console.log("✓ Cart verification completed successfully");
 }
 
-function logSuccessSummary(totalProducts: number, foundMProducts: number, outOfStockMProducts: number, productName: string): void {
+function logSuccessSummary(totalProducts, foundMProducts, outOfStockMProducts, productName) {
   console.log(`\n${MESSAGES.SCENARIO_SUCCESS}`);
   console.log(
     "All steps completed: Login → Men Section → Find Product Ending with M → Add to Cart → Verify Cart Item"
@@ -260,7 +250,7 @@ function logSuccessSummary(totalProducts: number, foundMProducts: number, outOfS
   console.log(`✅ Cart verification passed`);
 }
 
-function logOutOfStockSummary(totalProducts: number, foundMProducts: number, outOfStockMProducts: number): void {
+function logOutOfStockSummary(totalProducts, foundMProducts, outOfStockMProducts) {
   console.log(`\n=== SCENARIO 4 COMPLETED - ALL PRODUCTS OUT OF STOCK ===`);
   console.log(
     "Test completed: Login → Men Section → Find Products Ending with M → All Out of Stock"

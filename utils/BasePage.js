@@ -1,0 +1,136 @@
+/**
+ * BasePage - Base class for all page objects
+ * Wraps Playwright methods to leverage auto-waiting and provide consistent API
+ * 
+ * Best Practices:
+ * - Leverages Playwright's built-in auto-waiting (no custom wait logic needed)
+ * - Wraps Playwright methods, doesn't replace them
+ * - Provides consistent method signatures across page objects
+ */
+
+const { Page, Locator } = require('@playwright/test');
+
+class BasePage {
+  constructor(page) {
+    this.page = page;
+  }
+
+  /**
+   * Click on an element
+   * Auto-waits for element to be ready (attached, visible, stable, enabled)
+   */
+  async click(locator) {
+    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    await element.click();
+  }
+
+  /**
+   * Fill an input field
+   * Auto-waits for element to be ready before filling
+   */
+  async fill(locator, value) {
+    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    await element.fill(value);
+  }
+
+  /**
+   * Select an option from a dropdown
+   * Auto-waits for element to be ready before selecting
+   */
+  async selectOption(locator, value) {
+    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    await element.selectOption(value);
+  }
+
+  /**
+   * Get text content from an element
+   * Auto-waits for element to be ready before extracting text
+   */
+  async getText(locator) {
+    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    return await element.textContent();
+  }
+
+  /**
+   * Check if element is visible
+   * Auto-waits for element to be ready before checking visibility
+   */
+  async isVisible(locator) {
+    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    return await element.isVisible();
+  }
+
+  /**
+   * Scroll element into view if needed
+   * Auto-waits and scrolls if element is not in viewport
+   */
+  async scrollIntoView(locator) {
+    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    await element.scrollIntoViewIfNeeded();
+  }
+
+  /**
+   * Get a locator (useful for chaining operations)
+   */
+  locator(selector) {
+    return this.page.locator(selector);
+  }
+
+  /**
+   * Get element by role (semantic locator)
+   */
+  getByRole(role, options) {
+    return this.page.getByRole(role, options);
+  }
+
+  /**
+   * Get element by text
+   */
+  getByText(text, options) {
+    return this.page.getByText(text, options);
+  }
+
+  /**
+   * Get element by label
+   */
+  getByLabel(text, options) {
+    return this.page.getByLabel(text, options);
+  }
+
+  /**
+   * Navigation helpers
+   */
+  async navigateTo(url, options) {
+    await this.page.goto(url, options);
+  }
+
+  /**
+   * Wait for page load state
+   */
+  async waitForLoadState(state = 'networkidle') {
+    await this.page.waitForLoadState(state);
+  }
+
+  /**
+   * Wait for selector (use sparingly - prefer auto-waiting)
+   */
+  async waitForSelector(selector, options) {
+    await this.page.waitForSelector(selector, options);
+  }
+
+  /**
+   * Get current URL
+   */
+  getUrl() {
+    return this.page.url();
+  }
+
+  /**
+   * Get page title
+   */
+  async getTitle() {
+    return await this.page.title();
+  }
+}
+
+module.exports = { BasePage };

@@ -8,24 +8,23 @@
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui",
+    "test:allure": "npx playwright test && allure generate allure-results --clean && allure open",
     "report": "npx playwright show-report",
+    "report:allure": "allure generate allure-results --clean && allure open",
     "install-browsers": "npx playwright install"
   },
   "keywords": [
     "playwright",
     "automation",
     "testing",
-    "pom",
-    "typescript"
+    "pom"
   ],
   "author": "Test Automation Team",
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^12.1.0",
     "@playwright/test": "^1.44.0",
-    "@types/cucumber": "^6.0.1",
-    "dotenv": "^16.3.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.0"
+    "allure-playwright": "^2.9.2",
+    "dotenv": "^16.3.1"
   }
 }

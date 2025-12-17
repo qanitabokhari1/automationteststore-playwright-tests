@@ -1,39 +1,39 @@
-import { Page, expect } from '@playwright/test';
+const { expect } = require('@playwright/test');
+const { BasePage } = require('../utils/BasePage');
 
-export class CartPage {
-  constructor(private page: Page) {}
+class CartPage extends BasePage {
 
   async goToCart() {
     console.log('Navigating to cart...');
 
-    const cartElement = this.page.locator('//div[@id="cart_checkout1"]');
+    const cartElement = this.locator('//div[@id="cart_checkout1"]');
     
-    if (await cartElement.isVisible()) {
-      await cartElement.click();
+    if (await this.isVisible(cartElement)) {
+      await this.click(cartElement);
       console.log('✓ Clicked on cart element');
     } else {
       throw new Error('Cart element not found. Please check the page structure.');
     }
 
-    await this.page.waitForLoadState('networkidle', { timeout: 15000 });
+    await this.waitForLoadState('networkidle');
     
     try {
-      await this.page.locator('//h1[contains(text(),"Shopping Cart")]').waitFor({ state: 'visible', timeout: 5000 });
+      await this.locator('//h1[contains(text(),"Shopping Cart")]').waitFor({ state: 'visible', timeout: 5000 });
       console.log('✓ Cart page loaded successfully');
     } catch (error) {
       console.log('✓ Cart page navigation completed (no specific cart header found)');
     }
   }
 
-  async assertItemInCart(expectedQuantity: number = 1) {
+  async assertItemInCart(expectedQuantity = 1) {
     console.log(`Verifying item in cart with quantity ${expectedQuantity}...`);
 
-    const cartTable = this.page.locator('//table[@class="table table-striped table-bordered"]').first();
+    const cartTable = this.locator('//table[@class="table table-striped table-bordered"]').first();
     await expect(cartTable).toBeVisible({ timeout: 15000 });
     console.log('✓ Cart table is visible');
 
-    const quantityInput = this.page.locator('//*[@id="product_quantity"]');
-    if (await quantityInput.isVisible()) {
+    const quantityInput = this.locator('//*[@id="product_quantity"]');
+    if (await this.isVisible(quantityInput)) {
       await expect(quantityInput).toHaveValue(String(expectedQuantity));
       console.log(`✓ Quantity verified: ${expectedQuantity}`);
     } else {
@@ -41,9 +41,10 @@ export class CartPage {
     }
 
     try {
-      const priceElement = cartTable.locator('xpath=//td[contains(@class,"price")]').first();
-      if (await priceElement.isVisible()) {
-        const priceText = await priceElement.textContent();
+      // Remove redundant xpath= prefix
+      const priceElement = cartTable.locator('//td[contains(@class,"price")]').first();
+      if (await this.isVisible(priceElement)) {
+        const priceText = await this.getText(priceElement);
         if (priceText && priceText.trim()) {
           console.log(`✓ Price/Amount found: ${priceText.trim()}`);
         }
@@ -53,13 +54,12 @@ export class CartPage {
     }
   }
 
-    async verifyTshirtsInCart(expectedCount: number) {
+  async verifyTshirtsInCart(expectedCount) {
     console.log(`Verifying ${expectedCount} items in cart...`);
 
     await this.goToCart();
 
-    await this.page.waitForLoadState('networkidle', { timeout: 15000 });
-    await this.page.waitForTimeout(2000);
+    await this.waitForLoadState('networkidle');
 
     const tableSelectors = [
       '//table[@class="table table-striped table-bordered"]',
@@ -71,8 +71,8 @@ export class CartPage {
     let cartTable = null;
     for (const selector of tableSelectors) {
       try {
-        const table = this.page.locator(selector).first();
-        if (await table.isVisible()) {
+        const table = this.locator(selector).first();
+        if (await this.isVisible(table)) {
           cartTable = table;
           console.log(`✓ Found cart table using selector: ${selector}`);
           break;
@@ -116,7 +116,7 @@ export class CartPage {
     if (actualItemCount >= expectedCount) {
       console.log(`✓ Cart contains at least ${expectedCount} items as expected`);
     } else {
-      const emptyCartMessage = await this.page.locator('//div[contains(text(),"empty") or contains(text(),"Empty")]').isVisible();
+      const emptyCartMessage = await this.isVisible(this.locator('//div[contains(text(),"empty") or contains(text(),"Empty")]'));
       if (emptyCartMessage) {
         console.log('⚠️ Cart appears to be empty - items may not have been added successfully');
       }
@@ -135,3 +135,5 @@ export class CartPage {
   }
 
 }
+
+module.exports = { CartPage };

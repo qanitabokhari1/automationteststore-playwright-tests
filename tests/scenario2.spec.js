@@ -1,8 +1,8 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { HomePage } from '../pages/HomePage';
-import { ProductPage } from '../pages/ProductPage';
-import dotenv from 'dotenv';
+const { test } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
+const { HomePage } = require('../pages/HomePage');
+const { ProductPage } = require('../pages/ProductPage');
+const dotenv = require('dotenv');
 
 dotenv.config();
 dotenv.config({override: true});
@@ -13,8 +13,8 @@ test.describe('Scenario 2: T-shirts and Shoes Shopping Flow', () => {
     const homePage = new HomePage(page);
     const productPage = new ProductPage(page);
 
-    const username = process.env.USERNAME || 'sharjeel';
-    const password = process.env.PASSWORD || 'ahmad12';
+    const username = process.env.USERNAME || 'Qanita12';
+    const password = process.env.PASSWORD || 'Qanita123';
 
     try {
       console.log('\n🚀 Starting Scenario 2: T-shirts and Shoes Shopping Flow');

@@ -1,20 +1,20 @@
-import { When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+const { When, Then } = require('@cucumber/cucumber');
+const { expect } = require('@playwright/test');
 
 const SELECTORS = {
   MEN_SECTION: '//*[@id="categorymenu"]/nav/ul/li[6]',
   PRODUCT_CONTAINERS: '//*[@id="maincontainer"]/div/div/div/div/div[2]/div',
-  PRODUCT_NAME: (index: number) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[1]/div`,
-  OUT_OF_STOCK: (index: number) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[2]/div[3]/span`,
-  ADD_TO_CART: (index: number) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]//a[contains(text(),"Add to Cart")]`,
+  PRODUCT_NAME: (index) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[1]/div`,
+  OUT_OF_STOCK: (index) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]/div[2]/div[3]/span`,
+  ADD_TO_CART: (index) => `//*[@id="maincontainer"]/div/div/div/div/div[2]/div[${index}]//a[contains(text(),"Add to Cart")]`,
   CART_ITEM_NAME: '//*[@id="cart_checkout1"]/div/table/tbody/tr/td[2]/a'
-} as const;
+};
 
 const TIMEOUTS = {
   ELEMENT_VISIBLE: 10000,
   PAGE_LOAD: 15000,
   WAIT_AFTER_ACTION: 2000
-} as const;
+};
 
 let totalProducts = 0;
 let foundMProducts = 0;
@@ -36,7 +36,7 @@ When('I navigate to the men section', async function() {
   await page.waitForTimeout(TIMEOUTS.WAIT_AFTER_ACTION);
   
   // Smooth scroll to center after men section loads
-  await page.evaluate((selector: string) => {
+  await page.evaluate((selector) => {
     const element = document.querySelector(selector);
     if (element) {
       element.scrollIntoView({ 
@@ -148,7 +148,7 @@ Then('I should see the cart contains the product ending with M', async function(
   console.log(`✅ Cart verification passed`);
 });
 
-async function logAllProductNames(page: any, totalProducts: number): Promise<void> {
+async function logAllProductNames(page, totalProducts) {
   console.log('\n--- Debug: All product names ---');
   for (let i = 0; i < totalProducts; i++) {
     try {
@@ -165,11 +165,7 @@ async function logAllProductNames(page: any, totalProducts: number): Promise<voi
   }
 }
 
-async function processProductAtIndex(page: any, index: number): Promise<{
-  found: boolean;
-  name: string;
-  outOfStock: boolean;
-}> {
+async function processProductAtIndex(page, index) {
   const productNameElement = page.locator(SELECTORS.PRODUCT_NAME(index));
   
   if (!(await productNameElement.isVisible())) {
@@ -190,14 +186,14 @@ async function processProductAtIndex(page: any, index: number): Promise<{
   return { found: true, name, outOfStock: isOutOfStock };
 }
 
-async function addProductToCart(page: any, index: number, productName: string): Promise<void> {
+async function addProductToCart(page, index, productName) {
   const addToCartButton = page.locator(SELECTORS.ADD_TO_CART(index));
   await expect(addToCartButton).toBeVisible({ timeout: TIMEOUTS.ELEMENT_VISIBLE });
   await addToCartButton.click();
   console.log(`✓ Added to cart: "${productName}"`);
 }
 
-function logProductSearchSummary(totalProducts: number, foundMProducts: number, outOfStockMProducts: number): void {
+function logProductSearchSummary(totalProducts, foundMProducts, outOfStockMProducts) {
   console.log(`\n--- Summary ---`);
   console.log(`Total products found: ${totalProducts}`);
   console.log(`Products ending with M: ${foundMProducts}`);

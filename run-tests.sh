@@ -11,10 +11,10 @@ if [ ! -f .env ]; then
     echo "   Create .env file with your credentials for production use."
     
     # Set default environment variables
-    export USERNAME=sharjeel
-    export PASSWORD=ahmad12
+    export USERNAME=Qanita12
+    export PASSWORD=Qanita123
     export BASE_URL=https://automationteststore.com/
-    echo "   Using default credentials: USERNAME=sharjeel, PASSWORD=ahmad12"
+    echo "   Using default credentials: USERNAME=Qanita12, PASSWORD=Qanita123"
 else
     echo "✅ .env file found, loading credentials..."
     export $(cat .env | xargs)
@@ -28,7 +28,7 @@ run_tests() {
     echo ""
     echo "🧪 Running tests in $mode mode..."
     echo "🌐 Base URL: ${BASE_URL:-'https://automationteststore.com/'}"
-    echo "👤 Username: ${USERNAME:-'sharjeel'}"
+    echo "👤 Username: ${USERNAME:-'Qanita12'}"
     
     if [ "$browser" != "" ]; then
         echo "🌐 Browser: $browser"

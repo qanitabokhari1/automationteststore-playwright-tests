@@ -1,9 +1,9 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { HomePage } from '../pages/HomePage';
-import { ProductPage } from '../pages/ProductPage';
-import { CartPage } from '../pages/CartPage';
-import dotenv from 'dotenv';
+const { test } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
+const { HomePage } = require('../pages/HomePage');
+const { ProductPage } = require('../pages/ProductPage');
+const { CartPage } = require('../pages/CartPage');
+const dotenv = require('dotenv');
 
 dotenv.config();
 dotenv.config({override: true});
@@ -15,8 +15,8 @@ test.describe('Scenario 1: Complete E-commerce Flow', () => {
     const productPage = new ProductPage(page);
     const cartPage = new CartPage(page);
 
-    const username = process.env.USERNAME || 'sharjeel';
-    const password = process.env.PASSWORD || 'ahmad12';
+    const username = process.env.USERNAME || 'Qanita12';
+    const password = process.env.PASSWORD || 'Qanita123';
 
     try {
       console.log('\n🚀 Starting Scenario 1: Complete E-commerce Flow');
@@ -57,4 +57,3 @@ test.describe('Scenario 1: Complete E-commerce Flow', () => {
     }
   });
 });
-
