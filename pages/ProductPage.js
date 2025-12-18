@@ -106,7 +106,8 @@ class ProductPage extends BasePage {
     
     await this.waitForLoadState('networkidle');
     
-    const productElement = this.locator('//*[@id="maincontainer"]/div/div/div/div/div[3]/div[3]');
+    await this.page.waitForTimeout(5000);
+    const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
     
     if (await this.isVisible(productElement)) {
       console.log('✓ Found T-shirt product element');
@@ -131,9 +132,8 @@ class ProductPage extends BasePage {
 
   async addTshirtToCart() {
     console.log('Adding T-shirt to cart...');
-  
-    const addToCartButton = this.locator('//*[@id="product"]/fieldset/div[6]/ul/li/a');
-    
+    const addToCartButton = this.page.getByRole('link', { name: ' Add to Cart' });
+
     if (await this.isVisible(addToCartButton)) {
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
@@ -151,59 +151,32 @@ class ProductPage extends BasePage {
   }
 
   async addHighestValueShoeToCart() {
-    console.log('Adding highest value shoe to cart with quantity 2...');
-    
-    // Remove redundant xpath= prefix
-    const shoesLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]/div/ul[1]/li[1]');
+    const shoesLink = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
     
     if (await this.isVisible(shoesLink)) {
       await this.click(shoesLink);
-      console.log('✓ Clicked on Shoes section');
     } else {
-      console.log('Direct shoes selector not found, trying alternative navigation...');
-      
-      const shoesAlternative = this.locator('//a[contains(text(),"Shoes") and contains(@href,"category")]').first();
-      
+      const shoesAlternative = this.locator('//a[contains(text(),"Shoes")]').first();
       if (await this.isVisible(shoesAlternative)) {
         await this.click(shoesAlternative);
-        console.log('✓ Clicked on Shoes section (alternative method)');
       } else {
-        const shoesFallback = this.locator('//a[contains(text(),"Shoes")]').first();
-        
-        if (await this.isVisible(shoesFallback)) {
-          await this.click(shoesFallback);
-          console.log('✓ Clicked on Shoes section (fallback method)');
-        } else {
-          throw new Error('Shoes section not found with any navigation method');
-        }
+        throw new Error('Shoes section not found');
       }
     }
     
     await this.waitForLoadState('networkidle');
-    
     await this.sortByHighToLow();
-    console.log('✓ Shoes sorted by high to low price');
     
-    const productElement = this.locator('//*[@id="maincontainer"]/div/div/div/div/div[2]/div[1]');
+    const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
     
     if (await this.isVisible(productElement)) {
-      console.log('✓ Found highest value shoe product');
-      
       await this.click(productElement);
-      console.log('✓ Clicked on highest value shoe product');
-      
       await this.waitForLoadState('networkidle');
-      
       await this.setShoeQuantity(2);
-      
       await this.addShoeToCart();
-      
-      console.log('✓ Highest value shoe added to cart with quantity 2');
     } else {
       throw new Error('Shoe product element not found. Please check the page structure.');
     }
-    
-    console.log('✓ Completed adding highest value shoe to cart');
   }
 
   async sortByHighToLow() {
@@ -249,7 +222,7 @@ class ProductPage extends BasePage {
   async addShoeToCart() {
     console.log('Adding shoe to cart...');
     
-    const addToCartButton = this.locator('//*[@id="product"]/fieldset/div[5]/ul/li/a');
+    const addToCartButton = this.page.getByRole('link', { name: ' Add to Cart' });
     
     if (await this.isVisible(addToCartButton)) {
       await this.scrollIntoView(addToCartButton);
