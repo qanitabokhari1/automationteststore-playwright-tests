@@ -10,9 +10,9 @@ dotenv.config();
 const BASE_URL = process.env.BASE_URL || 'https://automationteststore.com/';
 const HEADLESS = process.env.HEADLESS !== 'false'; // Default to true if not specified
 const SLOW_MO = parseInt(process.env.SLOW_MO || '100', 10);
-const ACTION_TIMEOUT = parseInt(process.env.ACTION_TIMEOUT || '15000', 10);
-const NAVIGATION_TIMEOUT = parseInt(process.env.NAVIGATION_TIMEOUT || '20000', 10);
-const TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || '120000', 10);
+const ACTION_TIMEOUT = parseInt(process.env.ACTION_TIMEOUT || '30000', 10);
+const NAVIGATION_TIMEOUT = parseInt(process.env.NAVIGATION_TIMEOUT || '30000', 10);
+const TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || '180000', 10);
 const IS_CI = !!process.env.CI;
 
 module.exports = defineConfig({

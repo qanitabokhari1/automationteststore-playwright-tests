@@ -100,7 +100,7 @@ class BasePage {
   /**
    * Navigation helpers
    */
-  async navigateTo(url, options) {
+  async navigateTo(url, options = { waitUntil: 'domcontentloaded' }) {
     await this.page.goto(url, options);
   }
 

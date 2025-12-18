@@ -3,7 +3,7 @@ const { LoginPage } = require("../pages/LoginPage");
 const dotenv = require("dotenv");
 
 dotenv.config();
-dotenv.config({override: true});
+dotenv.config({ override: true });
 
 const SELECTORS = {
   MEN_SECTION: '//*[@id="categorymenu"]/nav/ul/li[6]',
@@ -14,11 +14,7 @@ const SELECTORS = {
   CART_ITEM_NAME: '//*[@id="cart_checkout1"]/div/table/tbody/tr/td[2]/a'
 };
 
-const TIMEOUTS = {
-  ELEMENT_VISIBLE: 10000,
-  PAGE_LOAD: 15000,
-  WAIT_AFTER_ACTION: 2000
-};
+// TIMEOUTS removed - using Playwright defaults from config
 
 const MESSAGES = {
   SCENARIO_START: "🚀 Starting Scenario 4: Men Section Testing",
@@ -43,8 +39,7 @@ test.describe("Scenario 4: Men Section Testing with XPath Selectors", () => {
     try {
       console.log(`\n${MESSAGES.SCENARIO_START}`);
       console.log(
-        `🌐 Base URL: ${
-          process.env.BASE_URL || "https://automationteststore.com/"
+        `🌐 Base URL: ${process.env.BASE_URL || "https://automationteststore.com/"
         }`
       );
       console.log(`👤 Username: ${username}`);
@@ -53,7 +48,7 @@ test.describe("Scenario 4: Men Section Testing with XPath Selectors", () => {
 
       await navigateToMenSection(page);
 
-      const { productName, totalProducts, foundMProducts, outOfStockMProducts, wasProductAdded } = 
+      const { productName, totalProducts, foundMProducts, outOfStockMProducts, wasProductAdded } =
         await findAndAddProductEndingWithM(page);
 
       if (wasProductAdded) {
@@ -81,39 +76,39 @@ async function performLogin(loginPage, username, password) {
 async function navigateToMenSection(page) {
   console.log("\n=== Step 2: Navigating to men section ===");
   const menLink = page.locator(SELECTORS.MEN_SECTION);
-  await expect(menLink).toBeVisible({ timeout: TIMEOUTS.ELEMENT_VISIBLE });
+  await expect(menLink).toBeVisible();
   await menLink.click();
   console.log("✓ Clicked on men section");
 
-  await page.waitForLoadState("networkidle", { timeout: TIMEOUTS.PAGE_LOAD });
-  await page.waitForTimeout(TIMEOUTS.WAIT_AFTER_ACTION);
-  
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForTimeout(2000);
+
   // Smooth scroll to center after men section loads
   await page.evaluate((selector) => {
     const element = document.querySelector(selector);
     if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth', 
+      element.scrollIntoView({
+        behavior: 'smooth',
         block: 'center',
         inline: 'nearest'
       });
     }
   }, 'body');
-  
+
   await page.waitForTimeout(1200); // Wait for scroll animation
-  
+
   console.log(MESSAGES.MEN_SECTION_LOADED);
 }
 
 async function findAndAddProductEndingWithM(page) {
   console.log('\n=== Step 3: Finding product ending with M ===');
-  
-  await page.waitForTimeout(TIMEOUTS.WAIT_AFTER_ACTION);
-  
+
+  await page.waitForTimeout(2000);
+
   const productContainers = page.locator(SELECTORS.PRODUCT_CONTAINERS);
   const totalProducts = await productContainers.count();
   console.log(`Total products found: ${totalProducts}`);
-  
+
   let productName = "";
   let productIndex = -1;
   let foundMProducts = 0;
@@ -123,13 +118,13 @@ async function findAndAddProductEndingWithM(page) {
   await logAllProductNames(page, totalProducts);
 
   console.log("\n--- Searching for products ending with M ---");
-  
+
   for (let i = 0; i < totalProducts; i++) {
     try {
       const result = await processProductAtIndex(page, i + 1);
       if (result.found) {
         foundMProducts++;
-        
+
         if (result.outOfStock) {
           outOfStockMProducts++;
           console.log(`${MESSAGES.OUT_OF_STOCK} "${result.name}"`);
@@ -181,13 +176,13 @@ async function logAllProductNames(page, totalProducts) {
 
 async function processProductAtIndex(page, index) {
   const productNameElement = page.locator(SELECTORS.PRODUCT_NAME(index));
-  
+
   if (!(await productNameElement.isVisible())) {
     return { found: false, name: "", outOfStock: false };
   }
 
   const name = (await productNameElement.textContent())?.trim() || "";
-  
+
   if (!name || !name.toLowerCase().endsWith("m")) {
     return { found: false, name: "", outOfStock: false };
   }
@@ -218,15 +213,14 @@ async function verifyCartContents(page, productName) {
   console.log("\n=== Step 4: Verifying cart contents ===");
 
   await page.goto(
-    `${
-      process.env.BASE_URL || "https://automationteststore.com/"
+    `${process.env.BASE_URL || "https://automationteststore.com/"
     }index.php?rt=checkout/cart`
   );
-  await page.waitForLoadState("networkidle", { timeout: TIMEOUTS.PAGE_LOAD });
+  await page.waitForLoadState("domcontentloaded");
   console.log("✓ Navigated to cart page");
 
   const cartItemName = page.locator(SELECTORS.CART_ITEM_NAME);
-  await expect(cartItemName).toBeVisible({ timeout: TIMEOUTS.ELEMENT_VISIBLE });
+  await expect(cartItemName).toBeVisible();
 
   const actualCartItemName = await cartItemName.textContent();
   if (!actualCartItemName) {
