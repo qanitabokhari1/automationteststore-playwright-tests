@@ -34,15 +34,21 @@ class ProductPage extends BasePage {
 
     console.log('Finding Add to Cart button for the first/newest product...');
     
-    const addToCartButton = this.locator('//a[contains(@class,"cart") or contains(text(),"Cart")]').first();
+    // Wait for products to load after sorting
+    await this.waitForLoadState('networkidle');
     
-    if (await this.isVisible(addToCartButton)) {
+    // Find the first product's Add to Cart button (class="productcart" with title="Add to Cart")
+    const addToCartButton = this.locator('//a[@class="productcart" and @title="Add to Cart"]').first();
+    
+    try {
+      // Wait for the button to be visible with timeout
+      await addToCartButton.waitFor({ state: 'visible', timeout: 10000 });
       console.log('✓ Found Add to Cart button');
       
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
       console.log(`✓ Clicked "Add to Cart"`);
-    } else {
+    } catch (error) {
       throw new Error('Add to Cart button not found. Please check the page structure.');
     }
     

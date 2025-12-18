@@ -99,9 +99,19 @@ class BasePage {
 
   /**
    * Navigation helpers
+   * @param {string} url - The URL to navigate to
+   * @param {object} options - Navigation options
+   * @param {string} options.waitUntil - When to consider navigation successful: 'load' | 'domcontentloaded' | 'networkidle' | 'commit'
+   * @param {number} options.timeout - Maximum navigation time in milliseconds (default: 60000)
    */
-  async navigateTo(url, options = { waitUntil: 'domcontentloaded' }) {
-    await this.page.goto(url, options);
+  async navigateTo(url, options = {}) {
+    const defaultOptions = {
+      waitUntil: 'load', // More reliable than 'domcontentloaded' for slow pages
+      timeout: 60000, // 60 seconds default timeout
+    };
+    
+    const mergedOptions = { ...defaultOptions, ...options };
+    await this.page.goto(url, mergedOptions);
   }
 
   /**
