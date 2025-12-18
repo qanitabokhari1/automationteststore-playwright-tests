@@ -18,7 +18,9 @@
 
 const { test: base } = require('@playwright/test');
 const { LoginPage } = require('../pages/LoginPage');
-const { config } = require('../config/config');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 // Extend base test with custom fixtures
 const test = base.extend({
@@ -26,11 +28,13 @@ const test = base.extend({
   authenticatedPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.navigateToLogin();
-    await loginPage.login(config.credentials.username, config.credentials.password);
-    
+    const username = process.env.USERNAME || 'Qanita12';
+    const password = process.env.PASSWORD || 'Qanita123';
+    await loginPage.login(username, password);
+
     // Use the authenticated page in the test
     await use(page);
-    
+
     // Teardown (if needed) - runs after test
     // Could log out here if needed
   },
