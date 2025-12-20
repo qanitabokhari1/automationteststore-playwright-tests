@@ -6,6 +6,8 @@ class LoginPage extends BasePage {
     const baseUrl = process.env.BASE_URL || 'https://automationteststore.com/';
     const loginUrl = `${baseUrl}index.php?rt=account/login`;
     await this.navigateTo(loginUrl);
+
+    // Wait for UI to be ready instead of relying on navigation events
     await expect(this.locator('//form[@id="loginFrm"]')).toBeVisible();
   }
 
@@ -22,6 +24,9 @@ class LoginPage extends BasePage {
     await this.fill(usernameField, username);
     await this.fill(passwordField, password);
     await this.click(loginButton);
+
+    // Wait for page to load after login
+    await this.page.waitForLoadState('domcontentloaded');
 
     try {
       await this.locator('//a[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });

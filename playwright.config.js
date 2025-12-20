@@ -35,7 +35,7 @@ module.exports = defineConfig({
     baseURL: BASE_URL,
     headless: HEADLESS,
     viewport: { width: 1280, height: 720 },
-    actionTimeout: ACTION_TIMEOUT,
+    actionTimeout: 90000,
     navigationTimeout: NAVIGATION_TIMEOUT,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

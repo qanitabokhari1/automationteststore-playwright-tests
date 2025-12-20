@@ -106,10 +106,10 @@ class BasePage {
    */
   async navigateTo(url, options = {}) {
     const defaultOptions = {
-      waitUntil: 'load', // More reliable than 'domcontentloaded' for slow pages
-      timeout: 60000, // 60 seconds default timeout
+      waitUntil: 'commit', // Only wait for navigation to start, not for resources
+      timeout: 90000,
     };
-    
+
     const mergedOptions = { ...defaultOptions, ...options };
     await this.page.goto(url, mergedOptions);
   }
