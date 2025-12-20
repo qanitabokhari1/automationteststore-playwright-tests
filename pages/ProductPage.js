@@ -3,156 +3,105 @@ const { BasePage } = require('../utils/BasePage');
 class ProductPage extends BasePage {
 
   async addNewestItemToCart() {
-    console.log('Loading products page...');
-    
     try {
       await this.locator('//div[@id="maincontainer"]').waitFor({ state: 'visible', timeout: 2000 });
-      console.log('✓ Products page loaded');
     } catch (error) {
-      console.log('Products page load verification failed, but continuing...');
     }
-    
-    console.log('Sorting products by newest first...');
+
     const sortDropdown = this.locator('//*[@id="sort"]');
-    
+
     if (await this.isVisible(sortDropdown)) {
       try {
         await this.click(sortDropdown);
-        console.log('✓ Opened sort dropdown');
-        await this.selectOption(sortDropdown, { index: 7 }); 
-        console.log('✓ Sorted products by: New to Old');
-        
-        console.log('Waiting for page to reload with new sorting...');
+        await this.selectOption(sortDropdown, { index: 7 });
+
         await this.waitForLoadState('networkidle');
-        console.log('✓ Products reordered by newest first');
       } catch (error) {
-        console.log('Sort dropdown selection failed, continuing with default order');
       }
-    } else {
-      console.log('No sort dropdown found, continuing with default product order');
     }
 
-    console.log('Finding Add to Cart button for the first/newest product...');
-    
     // Wait for products to load after sorting
     await this.waitForLoadState('networkidle');
-    
+
     // Find the first product's Add to Cart button (class="productcart" with title="Add to Cart")
     const addToCartButton = this.locator('//a[@class="productcart" and @title="Add to Cart"]').first();
-    
+
     try {
       // Wait for the button to be visible with timeout
       await addToCartButton.waitFor({ state: 'visible', timeout: 10000 });
-      console.log('✓ Found Add to Cart button');
-      
+
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
-      console.log(`✓ Clicked "Add to Cart"`);
     } catch (error) {
       throw new Error('Add to Cart button not found. Please check the page structure.');
     }
-    
+
     try {
       await this.locator('//div[contains(@class,"alert") and contains(text(),"success")]').waitFor({ state: 'visible', timeout: 2000 });
-      console.log('✓ Item successfully added to cart');
     } catch (error) {
-      console.log('No success message found, checking if item was added to cart...');
-      
-      const currentUrl = this.getUrl();
-      if (currentUrl.includes('cart')) {
-        console.log('✓ Redirected to cart page - item likely added successfully');
-      } else {
-        console.log('✓ Continuing - item may have been added to cart');
-      }
     }
-    
-    console.log('Navigating to cart page...');
+
     const cartElement = this.locator('//*[@id="maincontainer"]/div/div/div/div/div[2]/div[1]/div[2]/div[3]/div[1]');
-    
+
     if (await this.isVisible(cartElement)) {
       await this.click(cartElement);
       await this.waitForLoadState('networkidle');
-      console.log('✓ Navigated to cart page');
     } else {
       throw new Error('Could not navigate to cart page');
     }
   }
 
   async sortByLowToHigh() {
-    console.log('Sorting products by low to high price...');
-    
     const sortDropdown = this.locator('//*[@id="sort"]');
-    
+
     if (await this.isVisible(sortDropdown)) {
       try {
         await this.click(sortDropdown);
-        console.log('✓ Opened sort dropdown');
-        await this.selectOption(sortDropdown, { index: 3 }); 
-        console.log('✓ Sorted products by: Price Low to High');
-        
-        console.log('Waiting for page to reload with new sorting...');
+        await this.selectOption(sortDropdown, { index: 3 });
+
         await this.waitForLoadState('networkidle');
-        console.log('✓ Products reordered by price low to high');
       } catch (error) {
-        console.log('Sort dropdown selection failed, continuing with default order');
       }
-    } else {
-      console.log('No sort dropdown found at //*[@id="sort"], continuing with default product order');
     }
   }
 
   async selectLowestTshirt() {
-    console.log('Selecting lowest value T-shirt product...');
-    
     await this.waitForLoadState('networkidle');
-    
+
     await this.page.waitForTimeout(5000);
     const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
-    
+
     if (await this.isVisible(productElement)) {
-      console.log('✓ Found T-shirt product element');
-      
       await this.click(productElement);
-      console.log('✓ Clicked on T-shirt product');
-      
+
       await this.waitForLoadState('networkidle');
-      
-      console.log('✓ T-shirt product page loaded');
-      
-      console.log('Adding T-shirt to cart...');
+
       await this.addTshirtToCart();
-      console.log('✓ T-shirt added to cart');
-      
+
     } else {
       throw new Error('T-shirt product element not found. Please check the page structure.');
     }
-    
-    console.log('✓ Completed T-shirt selection and cart addition');
   }
 
   async addTshirtToCart() {
-    console.log('Adding T-shirt to cart...');
     const addToCartButton = this.page.getByRole('link', { name: ' Add to Cart' });
 
     if (await this.isVisible(addToCartButton)) {
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
-      console.log('✓ Clicked Add to Cart button');
     } else {
       throw new Error('Could not find Add to Cart button for T-shirt');
     }
-    
+
     try {
       await this.locator('//div[contains(@class,"alert") and contains(text(),"success")]').waitFor({ state: 'visible', timeout: 8000 });
-      console.log('✓ T-shirt added to cart successfully');
     } catch (error) {
-      console.log('✓ T-shirt likely added to cart (no success message found)');
     }
   }
 
   async addHighestValueShoeToCart() {
     const shoesLink = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
-    
+
     if (await this.isVisible(shoesLink)) {
       await this.click(shoesLink);
     } else {
@@ -163,12 +112,12 @@ class ProductPage extends BasePage {
         throw new Error('Shoes section not found');
       }
     }
-    
+
     await this.waitForLoadState('networkidle');
     await this.sortByHighToLow();
-    
+
     const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
-    
+
     if (await this.isVisible(productElement)) {
       await this.click(productElement);
       await this.waitForLoadState('networkidle');
@@ -180,37 +129,25 @@ class ProductPage extends BasePage {
   }
 
   async sortByHighToLow() {
-    console.log('Sorting products by high to low price...');
-    
     const sortDropdown = this.locator('//*[@id="sort"]');
-    
+
     if (await this.isVisible(sortDropdown)) {
       try {
         await this.click(sortDropdown);
-        console.log('✓ Opened sort dropdown');
-        
-        await this.selectOption(sortDropdown, { index: 4 }); 
-        console.log('✓ Sorted products by: Price High to Low');
-        
-        console.log('Waiting for page to reload with new sorting...');
+
+        await this.selectOption(sortDropdown, { index: 4 });
+
         await this.waitForLoadState('networkidle');
-        console.log('✓ Products reordered by price high to low');
       } catch (error) {
-        console.log('Sort dropdown selection failed, continuing with default order');
       }
-    } else {
-      console.log('No sort dropdown found at //*[@id="sort"], continuing with default product order');
     }
   }
 
   async setShoeQuantity(quantity) {
-    console.log(`Setting shoe quantity to ${quantity}...`);
-    
     try {
       const quantityInput = this.locator('//*[@id="product_quantity"]');
       if (await this.isVisible(quantityInput)) {
         await this.fill(quantityInput, String(quantity));
-        console.log(`✓ Quantity set to ${quantity}`);
       } else {
         throw new Error('Quantity input not found at selector: //*[@id="product_quantity"]');
       }
@@ -220,22 +157,19 @@ class ProductPage extends BasePage {
   }
 
   async addShoeToCart() {
-    console.log('Adding shoe to cart...');
-    
     const addToCartButton = this.page.getByRole('link', { name: ' Add to Cart' });
-    
-    if (await this.isVisible(addToCartButton)) {
+
+    try {
+      await addToCartButton.waitFor({ state: 'visible', timeout: 10000 });
+
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
-      console.log('✓ Clicked Add to Cart button for shoe');
-      
+
       try {
         await this.locator('//div[contains(@class,"alert") and contains(text(),"success")]').waitFor({ state: 'visible', timeout: 8000 });
-        console.log('✓ Shoe added to cart successfully');
       } catch (error) {
-        console.log('✓ Shoe likely added to cart (no success message found)');
       }
-    } else {
+    } catch (e) {
       throw new Error('Add to Cart button not found for shoe');
     }
   }

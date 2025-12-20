@@ -10,7 +10,6 @@ let context;
 let page;
 
 Before(async function () {
-  console.log('🚀 Starting test execution...');
 
   // Get browser from environment or default to chromium
   const browserName = process.env.BROWSER || 'chromium';
@@ -58,20 +57,17 @@ Before(async function () {
   this.browser = browser;
   this.context = context;
 
-  console.log(`✅ Browser setup completed (${browserName})`);
 });
 
 After(async function (scenario) {
-  console.log('🧹 Cleaning up test environment...');
 
   // Capture screenshot on failure
   if (scenario.result?.status === 'FAILED' && page) {
     try {
       const screenshotPath = `test-results/screenshots/failure-${Date.now()}.png`;
       await page.screenshot({ path: screenshotPath, fullPage: true });
-      console.log(`📸 Screenshot captured: ${screenshotPath}`);
     } catch (error) {
-      console.log('⚠️ Failed to capture screenshot:', error);
+      // Failed to capture screenshot
     }
   }
 
@@ -87,5 +83,4 @@ After(async function (scenario) {
     await browser.close();
   }
 
-  console.log('✅ Cleanup completed');
 });

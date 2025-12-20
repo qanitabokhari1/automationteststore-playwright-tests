@@ -25,15 +25,13 @@ class LoginPage extends BasePage {
 
     try {
       await this.locator('//a[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });
-      console.log('✓ Login successful - user authenticated');
+      await this.locator('//a[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });
     } catch (error) {
-      console.log('Login verification failed, checking if still on login page...');
 
       const currentUrl = this.getUrl();
       if (currentUrl.includes('login')) {
         throw new Error('Login failed - still on login page');
       }
-      console.log('✓ Login appears to have succeeded (redirected from login page)');
     }
   }
 }
