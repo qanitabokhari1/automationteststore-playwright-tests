@@ -9,7 +9,7 @@ dotenv.config();
  */
 const BASE_URL = process.env.BASE_URL || 'https://automationteststore.com/';
 const HEADLESS = process.env.HEADLESS !== 'false'; // Default to true if not specified
-const SLOW_MO = parseInt(process.env.SLOW_MO || '100', 10);
+
 const ACTION_TIMEOUT = parseInt(process.env.ACTION_TIMEOUT || '30000', 10);
 const NAVIGATION_TIMEOUT = parseInt(process.env.NAVIGATION_TIMEOUT || '30000', 10);
 const TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || '180000', 10);
@@ -40,29 +40,21 @@ module.exports = defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
-    launchOptions: {
-      slowMo: SLOW_MO,
-    },
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        launchOptions: {
-          args: ['--disable-web-security', '--disable-features=VizDisplayCompositor'],
-        },
-      },
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
   ],
 });
