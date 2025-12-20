@@ -3,6 +3,7 @@ const { BasePage } = require('../utils/BasePage');
 
 class HomePage extends BasePage {
   async clickHomeNav() {
+
     const homeLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[1]');
 
     await this.scrollIntoView(homeLink);
@@ -63,12 +64,19 @@ class HomePage extends BasePage {
 
     await this.waitForLoadState('networkidle');
 
+    // Hover over Apparel first to ensure sub-menu is visible
+    const apparelLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]');
+    if (await this.isVisible(apparelLink)) {
+      await apparelLink.hover();
+    }
+
     const tshirtsLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]/div/ul[1]/li[2]');
 
-    if (await this.isVisible(tshirtsLink)) {
+    try {
+      await tshirtsLink.waitFor({ state: 'visible', timeout: 5000 });
       await this.scrollIntoView(tshirtsLink);
       await this.click(tshirtsLink);
-    } else {
+    } catch (e) {
       throw new Error('T-shirts section not found. Please check the page structure.');
     }
 
