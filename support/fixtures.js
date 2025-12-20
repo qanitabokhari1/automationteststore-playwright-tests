@@ -1,21 +1,3 @@
-/**
- * Playwright Fixtures
- * Use these for Playwright tests (not Cucumber BDD tests)
- * 
- * Fixtures provide reusable test dependencies and environments.
- * They encapsulate setup and teardown logic.
- * 
- * Usage in tests:
- * ```javascript
- * const { test } = require('@playwright/test');
- * const { authenticatedPage } = require('./support/fixtures');
- * 
- * test('my test', async ({ authenticatedPage }) => {
- *   // authenticatedPage is already logged in
- * });
- * ```
- */
-
 const { test: base } = require('@playwright/test');
 const { LoginPage } = require('../pages/LoginPage');
 const dotenv = require('dotenv');
@@ -32,11 +14,7 @@ const test = base.extend({
     const password = process.env.PASSWORD || 'Qanita123';
     await loginPage.login(username, password);
 
-    // Use the authenticated page in the test
     await use(page);
-
-    // Teardown (if needed) - runs after test
-    // Could log out here if needed
   },
 
   // Login page fixture - provides LoginPage instance

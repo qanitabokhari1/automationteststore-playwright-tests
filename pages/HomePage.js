@@ -9,44 +9,31 @@ class HomePage extends BasePage {
     await this.scrollIntoView(homeLink);
     await this.click(homeLink);
 
-    await this.waitForLoadState('domcontentloaded');
-    await this.waitForLoadState('networkidle');
-
-    await this.locator('//div[@id="maincontainer"]').waitFor({ state: 'visible', timeout: 15000 });
+    await this.locator('//div[@id="maincontainer"]').waitFor({ state: 'visible' });
 
   }
 
   async clickDoveBrandFromCarousel() {
 
-    await this.waitForLoadState('networkidle');
-
     const brandCarousel = this.locator('//*[@id="brandcarousal"]');
 
-    await expect(brandCarousel).toBeVisible({ timeout: 15000 });
-    await brandCarousel.waitFor({ state: 'visible', timeout: 10000 });
+    await expect(brandCarousel).toBeVisible();
 
     await this.scrollIntoView(brandCarousel);
 
     const doveBrand = this.locator('//*[@id="brandcarousal"]/li[7]');
 
     await expect(doveBrand).toBeVisible({ timeout: 20000 });
-    await doveBrand.waitFor({ state: 'visible', timeout: 10000 });
 
     await this.click(doveBrand);
-
-    await this.waitForLoadState('domcontentloaded');
-    await this.waitForLoadState('networkidle');
 
   }
 
   async navigateToApparelSection() {
 
-    await this.waitForLoadState('networkidle');
-
     const apparelLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]');
 
-    await expect(apparelLink).toBeVisible({ timeout: 15000 });
-    await apparelLink.waitFor({ state: 'visible', timeout: 10000 });
+    await expect(apparelLink).toBeVisible();
 
     await this.scrollIntoView(apparelLink);
 
@@ -56,13 +43,9 @@ class HomePage extends BasePage {
       throw new Error('APPAREL & ACCESSORIES section not found at //*[@id="categorymenu"]/nav/ul/li[2]');
     }
 
-    await this.waitForLoadState('domcontentloaded');
-    await this.waitForLoadState('networkidle');
   }
 
   async navigateToTshirtsSection() {
-
-    await this.waitForLoadState('networkidle');
 
     // Hover over Apparel first to ensure sub-menu is visible
     const apparelLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]');
@@ -73,15 +56,13 @@ class HomePage extends BasePage {
     const tshirtsLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]/div/ul[1]/li[2]');
 
     try {
-      await tshirtsLink.waitFor({ state: 'visible', timeout: 5000 });
+      await tshirtsLink.waitFor({ state: 'visible' });
       await this.scrollIntoView(tshirtsLink);
       await this.click(tshirtsLink);
     } catch (e) {
       throw new Error('T-shirts section not found. Please check the page structure.');
     }
 
-    await this.waitForLoadState('domcontentloaded');
-    await this.waitForLoadState('networkidle');
   }
 
 }

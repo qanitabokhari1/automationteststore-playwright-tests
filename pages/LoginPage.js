@@ -6,7 +6,7 @@ class LoginPage extends BasePage {
     const baseUrl = process.env.BASE_URL || 'https://automationteststore.com/';
     const loginUrl = `${baseUrl}index.php?rt=account/login`;
     await this.navigateTo(loginUrl);
-    await expect(this.locator('//form[@id="loginFrm"]')).toBeVisible({ timeout: 15000 });
+    await expect(this.locator('//form[@id="loginFrm"]')).toBeVisible();
   }
 
   async login(username, password) {
@@ -15,16 +15,15 @@ class LoginPage extends BasePage {
     const loginButton = this.getByRole('button', { name: 'Login' });
 
     // Playwright auto-waits for elements to be ready
-    await expect(usernameField).toBeVisible({ timeout: 10000 });
-    await expect(passwordField).toBeVisible({ timeout: 10000 });
-    await expect(loginButton).toBeVisible({ timeout: 10000 });
+    await expect(usernameField).toBeVisible();
+    await expect(passwordField).toBeVisible();
+    await expect(loginButton).toBeVisible();
 
     await this.fill(usernameField, username);
     await this.fill(passwordField, password);
     await this.click(loginButton);
 
     try {
-      await this.locator('//a[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });
       await this.locator('//a[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });
     } catch (error) {
 

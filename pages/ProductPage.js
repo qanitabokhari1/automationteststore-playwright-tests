@@ -14,21 +14,17 @@ class ProductPage extends BasePage {
       try {
         await this.click(sortDropdown);
         await this.selectOption(sortDropdown, { index: 7 });
-
-        await this.waitForLoadState('networkidle');
       } catch (error) {
       }
     }
 
-    // Wait for products to load after sorting
-    await this.waitForLoadState('networkidle');
 
     // Find the first product's Add to Cart button (class="productcart" with title="Add to Cart")
     const addToCartButton = this.locator('//a[@class="productcart" and @title="Add to Cart"]').first();
 
     try {
       // Wait for the button to be visible with timeout
-      await addToCartButton.waitFor({ state: 'visible', timeout: 10000 });
+      await addToCartButton.waitFor({ state: 'visible' });
 
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
@@ -45,7 +41,6 @@ class ProductPage extends BasePage {
 
     if (await this.isVisible(cartElement)) {
       await this.click(cartElement);
-      await this.waitForLoadState('networkidle');
     } else {
       throw new Error('Could not navigate to cart page');
     }
@@ -59,26 +54,19 @@ class ProductPage extends BasePage {
         await this.click(sortDropdown);
         await this.selectOption(sortDropdown, { index: 3 });
 
-        await this.waitForLoadState('networkidle');
       } catch (error) {
       }
     }
   }
 
   async selectLowestTshirt() {
-    await this.waitForLoadState('networkidle');
-
-    await this.page.waitForTimeout(5000);
     const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
 
-    if (await this.isVisible(productElement)) {
+    try {
+      await productElement.waitFor({ state: 'visible' });
       await this.click(productElement);
-
-      await this.waitForLoadState('networkidle');
-
       await this.addTshirtToCart();
-
-    } else {
+    } catch (error) {
       throw new Error('T-shirt product element not found. Please check the page structure.');
     }
   }
@@ -86,10 +74,11 @@ class ProductPage extends BasePage {
   async addTshirtToCart() {
     const addToCartButton = this.page.getByRole('link', { name: ' Add to Cart' });
 
-    if (await this.isVisible(addToCartButton)) {
+    try {
+      await addToCartButton.waitFor({ state: 'visible' });
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);
-    } else {
+    } catch (error) {
       throw new Error('Could not find Add to Cart button for T-shirt');
     }
 
@@ -102,28 +91,29 @@ class ProductPage extends BasePage {
   async addHighestValueShoeToCart() {
     const shoesLink = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
 
-    if (await this.isVisible(shoesLink)) {
+    try {
+      await shoesLink.waitFor({ state: 'visible', timeout: 5000 });
       await this.click(shoesLink);
-    } else {
+    } catch {
       const shoesAlternative = this.locator('//a[contains(text(),"Shoes")]').first();
-      if (await this.isVisible(shoesAlternative)) {
+      try {
+        await shoesAlternative.waitFor({ state: 'visible' });
         await this.click(shoesAlternative);
-      } else {
+      } catch (error) {
         throw new Error('Shoes section not found');
       }
     }
 
-    await this.waitForLoadState('networkidle');
     await this.sortByHighToLow();
 
     const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
 
-    if (await this.isVisible(productElement)) {
+    try {
+      await productElement.waitFor({ state: 'visible' });
       await this.click(productElement);
-      await this.waitForLoadState('networkidle');
       await this.setShoeQuantity(2);
       await this.addShoeToCart();
-    } else {
+    } catch (error) {
       throw new Error('Shoe product element not found. Please check the page structure.');
     }
   }
@@ -137,7 +127,6 @@ class ProductPage extends BasePage {
 
         await this.selectOption(sortDropdown, { index: 4 });
 
-        await this.waitForLoadState('networkidle');
       } catch (error) {
       }
     }
@@ -160,7 +149,7 @@ class ProductPage extends BasePage {
     const addToCartButton = this.page.getByRole('link', { name: ' Add to Cart' });
 
     try {
-      await addToCartButton.waitFor({ state: 'visible', timeout: 10000 });
+      await addToCartButton.waitFor({ state: 'visible' });
 
       await this.scrollIntoView(addToCartButton);
       await this.click(addToCartButton);

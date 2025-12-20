@@ -13,10 +13,8 @@ class CartPage extends BasePage {
       throw new Error('Cart element not found. Please check the page structure.');
     }
 
-    await this.waitForLoadState('networkidle');
-
     try {
-      await this.locator('//h1[contains(text(),"Shopping Cart")]').waitFor({ state: 'visible', timeout: 5000 });
+      await this.locator('//h1[contains(text(),"Shopping Cart")]').waitFor({ state: 'visible' });
     } catch (error) {
     }
   }
@@ -24,7 +22,7 @@ class CartPage extends BasePage {
   async assertItemInCart(expectedQuantity = 1) {
 
     const cartTable = this.locator('//table[@class="table table-striped table-bordered"]').first();
-    await expect(cartTable).toBeVisible({ timeout: 15000 });
+    await expect(cartTable).toBeVisible();
 
     const quantityInput = this.locator('//*[@id="product_quantity"]');
     if (await this.isVisible(quantityInput)) {
@@ -48,7 +46,6 @@ class CartPage extends BasePage {
 
     await this.goToCart();
 
-    await this.waitForLoadState('networkidle');
 
     const tableSelectors = [
       '//table[@class="table table-striped table-bordered"]',
