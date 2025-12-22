@@ -65,6 +65,26 @@ class HomePage extends BasePage {
 
   }
 
+  async navigateToShoesSection() {
+
+    // Hover over Apparel first to ensure sub-menu is visible
+    const apparelLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]');
+    if (await this.isVisible(apparelLink)) {
+      await apparelLink.hover();
+    }
+
+    const shoesLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[2]/div/ul[1]/li[1]');
+
+    try {
+      await shoesLink.waitFor({ state: 'visible' });
+      await this.scrollIntoView(shoesLink);
+      await this.click(shoesLink);
+    } catch (e) {
+      throw new Error('Shoes section not found. Please check the page structure.');
+    }
+
+  }
+
 }
 
 module.exports = { HomePage };
