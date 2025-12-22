@@ -6,9 +6,9 @@ const { CartPage } = require('../pages/CartPage');
 const dotenv = require('dotenv');
 
 dotenv.config();
-dotenv.config({ override: true });
 
 test.describe('Scenario 1: Complete E-commerce Flow', () => {
+  
   test('Login → Home → Select Dove Brand → Add Newest Item to Cart → Verify Cart', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);

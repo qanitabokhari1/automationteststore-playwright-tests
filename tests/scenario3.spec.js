@@ -7,6 +7,7 @@ dotenv.config();
 dotenv.config({ override: true });
 
 test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () => {
+
   test('Home → Skincare Section → Count Sale/Out of Stock Items → Add Sale Items to Cart → Verify Cart', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const cartPage = new CartPage(page);
@@ -33,6 +34,8 @@ test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () =>
       let saleItemsCount = 0;
       let outOfStockCount = 0;
       let saleItemsAdded = 0;
+
+      //From all products, add available sale items to the cart and collect statistics
 
       for (let i = 0; i < totalProducts; i++) {
         try {

@@ -3,7 +3,6 @@ const { LoginPage } = require("../pages/LoginPage");
 const dotenv = require("dotenv");
 
 dotenv.config();
-dotenv.config({ override: true });
 
 const SELECTORS = {
   MEN_SECTION: '//*[@id="categorymenu"]/nav/ul/li[6]',
@@ -14,7 +13,6 @@ const SELECTORS = {
   CART_ITEM_NAME: '//*[@id="cart_checkout1"]/div/table/tbody/tr/td[2]/a'
 };
 
-// TIMEOUTS removed - using Playwright defaults from config
 
 test.describe("Scenario 4: Men Section Testing with XPath Selectors", () => {
   test("Home → Men Section → Add Product Ending with M to Cart → Verify Cart Item Ends with M", async ({
