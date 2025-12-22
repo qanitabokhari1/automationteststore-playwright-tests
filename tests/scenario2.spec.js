@@ -17,6 +17,7 @@ test.describe('Scenario 2: T-shirts and Shoes Shopping Flow', () => {
     const password = process.env.PASSWORD || 'Qanita123';
 
     try {
+      
       await loginPage.navigateToLogin();
       await loginPage.login(username, password);
 

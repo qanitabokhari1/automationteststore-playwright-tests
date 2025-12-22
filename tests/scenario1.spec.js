@@ -21,6 +21,7 @@ test.describe('Scenario 1: Complete E-commerce Flow', () => {
     try {
 
       await loginPage.navigateToLogin();
+      
       await loginPage.login(username, password);
 
       await homePage.clickHomeNav();
