@@ -11,7 +11,7 @@
 - Page Object Model for encapsulating UI logic
 - Step definitions for mapping Gherkin steps to code
 
-For a full breakdown, see [`docs/project_structure_explained.md`](docs/project_structure_explained.md).
+For a full breakdown of the framework, Selenium implementation, and comparisons, see the [Documentation](#-documentation) section.
 
 ---
 
@@ -308,11 +308,13 @@ npx playwright test tests/scenario1.spec.js --debug
 - **BDD Support**: Cucumber.js for business-readable tests
 - **JavaScript**: Modern ES6+ JavaScript throughout
 
-## 📚 Additional Resources
+## 📚 Documentation
 
-- **Selector Guidelines**: See `docs/SELECTOR_GUIDELINES.md`
-- **Configuration**: See `config/config.js` for all options
-- **Examples**: Check `tests/` and `features/` folders
+- **[Framework Implementation Details](docs/framework_implementation_details.md)**: Deep dive into the Playwright architecture.
+- **[Selenium Implementation Guide](docs/selenium_implementation_guide.md)**: Guide for implementing the same framework in Selenium.
+- **[Selenium vs Playwright Comparison](docs/selenium_vs_playwright_comparison.md)**: Detailed comparison of the two frameworks.
+- **[Selector Guidelines](docs/SELECTOR_GUIDELINES.md)**: Best practices for element selection.
+- **[Project Structure Explained](docs/project_structure_explained.md)**: detailed folder and file breakdown.
 
 ---
 
