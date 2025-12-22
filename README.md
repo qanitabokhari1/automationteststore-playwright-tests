@@ -67,7 +67,36 @@ HEADLESS=false            # Set to true for headless mode
 ACTION_TIMEOUT=15000
 NAVIGATION_TIMEOUT=20000
 SLOW_MO=100
+
+# Database Configuration (Optional - for database connectivity)
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=PalywrightTestDb
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
 ```
+
+### Database Setup
+
+If you want to use database connectivity features:
+
+1. **Install PostgreSQL** (if not already installed)
+
+2. **Create the database and table:**
+   ```bash
+   # Option 1: Using psql command line
+   psql -U postgres -f schema.sql
+   
+   # Option 2: Manual setup
+   psql -U postgres
+   CREATE DATABASE "SeleniumTestDb";
+   \c SeleniumTestDb
+   # Then run the CREATE TABLE statements from schema.sql
+   ```
+
+3. **Update `.env` file** with your database credentials (see above)
+
+4. **The database utility is available** in `utils/Database.js` for use in your tests
 
 ### Run Tests
 
@@ -163,7 +192,8 @@ This section explores the codebase, explains the purpose of each folder and key 
 - **steps/**: Step definition files. Map Gherkin steps from feature files to executable code.
 - **support/**: Support files like hooks and fixtures for test lifecycle and context management.
 - **tests/**: Traditional Playwright test specification files.
-- **utils/**: Utility/helper files, e.g., BasePage.js, constants.js, ElementHelper.js.
+- **utils/**: Utility/helper files, e.g., BasePage.js, Database.js, ElementHelper.js.
+- **schema.sql**: PostgreSQL database schema for user data storage.
 
 ### Locator Strategies (Selectors)
 - **XPath Selectors**: Used for precise element identification, especially when elements lack unique IDs or classes.
@@ -216,6 +246,20 @@ BROWSER=all npx playwright test
 - Automatic screenshots on failure
 - Video recording for failed tests
 
+### Database Connectivity
+- **PostgreSQL Integration**: Connect to PostgreSQL database for test data validation
+- **Database Utility**: `utils/Database.js` provides methods for database operations
+- **User Validation**: Query and validate user credentials against database
+- **Flexible Queries**: Support for custom SQL queries and user management
+- **Usage Example**:
+  ```javascript
+  const Database = require('./utils/Database');
+  const db = new Database();
+  await db.connect();
+  const users = await db.queryUser(username, password);
+  await db.disconnect();
+  ```
+
 ### Selector Strategy
 - XPath selectors for Scenarios 1, 3, 4
 - CSS selectors for Scenario 2
@@ -232,6 +276,13 @@ BROWSER=all npx playwright test
 - Increase `ACTION_TIMEOUT` or `NAVIGATION_TIMEOUT` in `.env`
 - Check network connectivity
 - Verify page loads completely
+
+### Database Connection Issues
+- Ensure PostgreSQL is running: `sudo service postgresql start` (Linux) or check service status
+- Verify database credentials in `.env` file
+- Ensure database exists: `psql -U postgres -l` to list databases
+- Check if table exists: Connect to database and run `\d users`
+- Verify schema.sql has been executed
 
 ### Debug Mode
 ```bash

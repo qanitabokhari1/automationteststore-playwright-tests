@@ -26,6 +26,7 @@
     "@playwright/test": "^1.44.0",
     "allure-commandline": "^2.29.0",
     "allure-playwright": "^2.9.2",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.3"
   }
 }
