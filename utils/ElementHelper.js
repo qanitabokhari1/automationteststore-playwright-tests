@@ -1,10 +1,3 @@
-/**
- * ElementHelper - Standalone helper utilities for element operations
- * Can be used independently or alongside BasePage
- * 
- * Note: These methods leverage Playwright's auto-waiting
- */
-
 const { Page, Locator } = require('@playwright/test');
 
 class ElementHelper {

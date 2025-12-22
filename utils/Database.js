@@ -1,15 +1,3 @@
-/**
- * Database - PostgreSQL database utility class
- * Handles database connections and queries for test data validation
- * 
- * Usage:
- * const Database = require('./utils/Database');
- * const db = new Database();
- * await db.connect();
- * const users = await db.queryUser(username, password);
- * await db.disconnect();
- */
-
 const { Client } = require('pg');
 require('dotenv').config();
 
@@ -31,7 +19,7 @@ class Database {
                 user: process.env.DB_USERNAME || 'postgres',
                 password: process.env.DB_PASSWORD,
             });
-            
+
             await this.client.connect();
             console.log('✅ Connected to PostgreSQL database');
             return this.client;
