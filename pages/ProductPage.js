@@ -89,23 +89,9 @@ class ProductPage extends BasePage {
   }
 
   async addHighestValueShoeToCart() {
-    const shoesLink = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
-
-    try {
-      await shoesLink.waitFor({ state: 'visible', timeout: 5000 });
-      await this.click(shoesLink);
-    } catch {
-      const shoesAlternative = this.locator('//a[contains(text(),"Shoes")]').first();
-      try {
-        await shoesAlternative.waitFor({ state: 'visible' });
-        await this.click(shoesAlternative);
-      } catch (error) {
-        throw new Error('Shoes section not found');
-      }
-    }
-
-    await this.sortByHighToLow();
-
+    // Navigation to Shoes section and sorting are now handled explicitly in the test
+    // This method assumes we're already on the Shoes page and products are sorted
+    
     const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
 
     try {

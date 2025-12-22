@@ -30,6 +30,10 @@ test.describe('Scenario 2: T-shirts and Shoes Shopping Flow', () => {
 
       await homePage.navigateToApparelSection();
 
+      await homePage.navigateToShoesSection();
+
+      await productPage.sortByHighToLow();
+
       await productPage.addHighestValueShoeToCart();
 
     } catch (error) {
