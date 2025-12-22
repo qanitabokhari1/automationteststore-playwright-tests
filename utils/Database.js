@@ -27,7 +27,7 @@ class Database {
             this.client = new Client({
                 host: process.env.DB_HOST || '127.0.0.1',
                 port: process.env.DB_PORT || 5432,
-                database: process.env.DB_DATABASE || 'SeleniumTestDb',
+                database: process.env.DB_DATABASE || 'PalywrightTestDb',
                 user: process.env.DB_USERNAME || 'postgres',
                 password: process.env.DB_PASSWORD,
             });
