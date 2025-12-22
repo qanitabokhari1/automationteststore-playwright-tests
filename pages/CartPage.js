@@ -109,6 +109,12 @@ class CartPage extends BasePage {
 
   }
 
+  async assertItemInCartByName(expectedName) {
+    const cartItemName = this.locator('//*[@id="cart_checkout1"]/div/table/tbody/tr/td[2]/a');
+    await expect(cartItemName).toBeVisible();
+    const actualName = await cartItemName.textContent();
+    await expect(actualName.trim()).toBe(expectedName.trim());
+  }
 }
 
 module.exports = { CartPage };
