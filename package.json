@@ -8,9 +8,9 @@
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui",
-    "test:allure": "npx playwright test && allure generate allure-results --clean && allure open",
+    "test:allure": "npx playwright test && npx allure generate allure-results --clean && npx allure open",
     "report": "npx playwright show-report",
-    "report:allure": "allure generate allure-results --clean && allure open",
+    "report:allure": "npx allure generate allure-results --clean && npx allure open",
     "install-browsers": "npx playwright install"
   },
   "keywords": [
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.1.0",
     "@playwright/test": "^1.44.0",
+    "allure-commandline": "^2.29.0",
     "allure-playwright": "^2.9.2",
     "dotenv": "^16.3.1"
   }

@@ -24,7 +24,6 @@ module.exports = defineConfig({
   reporter: [
     ['html'],
     ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/results.xml' }],
     ['allure-playwright', { outputFolder: 'allure-results' }],
   ],
   timeout: TEST_TIMEOUT,
