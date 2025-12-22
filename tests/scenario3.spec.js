@@ -64,7 +64,7 @@ test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () =>
             }
           }
         } catch (error) {
-          // Continue on error
+          
         }
       }
 
