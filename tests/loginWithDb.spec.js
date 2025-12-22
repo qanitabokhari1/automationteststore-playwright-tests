@@ -38,7 +38,8 @@ test.describe('Login Test with Database Validation', () => {
     await loginPage.login(username, password);
 
     // Step 2: Verify login success
-    const welcomeMessage = loginPage.locator('//a[contains(text(),"Welcome back")]');
+    // The "Welcome back" text is nested inside a div, so we target the div element
+    const welcomeMessage = loginPage.locator('//div[contains(text(),"Welcome back")]');
     await expect(welcomeMessage).toBeVisible({ timeout: 10000 });
     console.log('✅ Login successful - Welcome message found');
 

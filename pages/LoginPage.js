@@ -29,7 +29,8 @@ class LoginPage extends BasePage {
     await this.page.waitForLoadState('domcontentloaded');
 
     try {
-      await this.locator('//a[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });
+      // The "Welcome back" text is nested inside a div, so we target the div element
+      await this.locator('//div[contains(text(),"Welcome back")]').waitFor({ state: 'visible', timeout: 1000 });
     } catch (error) {
 
       const currentUrl = this.getUrl();
