@@ -1,13 +1,3 @@
-/**
- * BasePage - Base class for all page objects
- * Wraps Playwright methods to leverage auto-waiting and provide consistent API
- * 
- * Best Practices:
- * - Leverages Playwright's built-in auto-waiting (no custom wait logic needed)
- * - Wraps Playwright methods, doesn't replace them
- * - Provides consistent method signatures across page objects
- */
-
 const { Page, Locator } = require('@playwright/test');
 
 class BasePage {
