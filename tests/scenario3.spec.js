@@ -23,7 +23,6 @@ test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () =>
       await expect(skincareLink).toBeVisible({ timeout: 10000 });
       await skincareLink.click();
 
-      await page.waitForLoadState('networkidle', { timeout: 15000 });
       await page.waitForTimeout(2000);
 
       await page.waitForTimeout(2000);
