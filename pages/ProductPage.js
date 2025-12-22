@@ -13,8 +13,9 @@ class ProductPage extends BasePage {
     if (await this.isVisible(sortDropdown)) {
       try {
         await this.click(sortDropdown);
-        await this.selectOption(sortDropdown, { index: 7 });
-      } catch (error) {
+        await this.selectOption(sortDropdown, { index: 7 });  //?
+      }
+      catch (error) {
       }
     }
 
@@ -91,7 +92,7 @@ class ProductPage extends BasePage {
   async addHighestValueShoeToCart() {
     // Navigation to Shoes section and sorting are now handled explicitly in the test
     // This method assumes we're already on the Shoes page and products are sorted
-    
+
     const productElement = this.page.getByRole('link').filter({ hasText: /^$/ }).first();
 
     try {

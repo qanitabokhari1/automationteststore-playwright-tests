@@ -19,7 +19,7 @@ class HomePage extends BasePage {
 
     await expect(brandCarousel).toBeVisible();
 
-    await this.scrollIntoView(brandCarousel);
+    // await this.scrollIntoView(brandCarousel);
 
     const doveBrand = this.locator('//*[@id="brandcarousal"]/li[7]');
 
@@ -83,6 +83,20 @@ class HomePage extends BasePage {
       throw new Error('Shoes section not found. Please check the page structure.');
     }
 
+  }
+
+  async navigateToSkincareSection() {
+    const skincareLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[4]');
+    await skincareLink.waitFor({ state: 'visible', timeout: 10000 });
+    await this.click(skincareLink);
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async navigateToMenSection() {
+    const menLink = this.locator('//*[@id="categorymenu"]/nav/ul/li[6]');
+    await menLink.waitFor({ state: 'visible', timeout: 10000 });
+    await this.click(menLink);
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
 }

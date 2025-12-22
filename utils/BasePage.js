@@ -1,5 +1,8 @@
 const { Page, Locator } = require('@playwright/test');
 
+
+//typescript extra remove
+
 class BasePage {
   constructor(page) {
     this.page = page;

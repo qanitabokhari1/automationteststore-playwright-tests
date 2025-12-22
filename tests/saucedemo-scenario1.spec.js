@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { SauceDemoLoginPage } = require('../pages/SauceDemoLoginPage');
 
 test.describe('SauceDemo Scenario 1: Login with Invalid Password', () => {
+  
   test('Should display error message when login with invalid password', async ({ page }) => {
     const sauceDemoLoginPage = new SauceDemoLoginPage(page);
 
