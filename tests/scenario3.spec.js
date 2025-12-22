@@ -4,7 +4,7 @@ const { CartPage } = require('../pages/CartPage');
 const dotenv = require('dotenv');
 
 dotenv.config();
-dotenv.config({ override: true });
+
 
 test.describe('Scenario 3: Skincare Section Testing with XPath Selectors', () => {
 
