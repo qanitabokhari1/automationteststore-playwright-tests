@@ -1,5 +1,3 @@
-
-
 # Automation Test Store - Playwright Testing Framework
 
 ---
