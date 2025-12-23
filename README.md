@@ -11,8 +11,6 @@
 - Page Object Model for encapsulating UI logic
 - Step definitions for mapping Gherkin steps to code
 
-For a full breakdown of the framework, Selenium implementation, and comparisons, see the [Documentation](#-documentation) section.
-
 ---
 
 ---
