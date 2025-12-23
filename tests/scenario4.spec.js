@@ -16,8 +16,8 @@ test.describe("Scenario 4: Men Section Testing with POM", () => {
     const menPage = new MenPage(page);
     const cartPage = new CartPage(page);
 
-    const username = process.env.LOGIN_USERNAME || process.env.USERNAME || "Qanita12";
-    const password = process.env.LOGIN_PASSWORD || process.env.PASSWORD || "Qanita123";
+    const username = process.env.APP_USERNAME || "Qanita12";
+    const password = process.env.APP_PASSWORD || "Qanita123";
 
     await loginPage.navigateToLogin();
     await loginPage.login(username, password);

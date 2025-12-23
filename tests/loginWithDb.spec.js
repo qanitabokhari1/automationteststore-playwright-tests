@@ -1,8 +1,3 @@
-/**
- * Example test demonstrating database connectivity
- * This test shows how to integrate database validation with Playwright tests
- */
-
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../pages/LoginPage');
 const Database = require('../utils/Database');
@@ -30,8 +25,8 @@ test.describe('Login Test with Database Validation', () => {
 
   test('Login and validate user in database', async ({ page }) => {
     const loginPage = new LoginPage(page);
-    const username = process.env.USERNAME || 'Qanita12';
-    const password = process.env.PASSWORD || 'Qanita123';
+    const username = process.env.APP_USERNAME || 'Qanita12';
+    const password = process.env.APP_PASSWORD || 'Qanita123';
 
     // Step 1: Perform login
     await loginPage.navigateToLogin();
@@ -47,7 +42,7 @@ test.describe('Login Test with Database Validation', () => {
     if (database) {
       try {
         const users = await database.queryUser(username, password);
-        
+
         if (users.length > 0) {
           console.log('✅ User exists in database:', {
             id: users[0].id,

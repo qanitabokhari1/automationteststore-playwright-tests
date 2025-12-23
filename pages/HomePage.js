@@ -19,8 +19,6 @@ class HomePage extends BasePage {
 
     await expect(brandCarousel).toBeVisible();
 
-    // await this.scrollIntoView(brandCarousel);
-
     const doveBrand = this.locator('//*[@id="brandcarousal"]/li[7]');
 
     await expect(doveBrand).toBeVisible({ timeout: 20000 });

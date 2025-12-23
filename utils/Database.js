@@ -12,14 +12,22 @@ class Database {
      */
     async connect() {
         try {
-            this.client = new Client({
+            const config = {
                 host: process.env.DB_HOST || '127.0.0.1',
-                port: process.env.DB_PORT || 5432,
-                database: process.env.DB_DATABASE || 'PalywrightTestDb',
+                port: parseInt(process.env.DB_PORT || 5432),
+                database: (process.env.DB_DATABASE || 'PalywrightTestDb').trim() + ' ',
                 user: process.env.DB_USERNAME || 'postgres',
                 password: process.env.DB_PASSWORD,
+            };
+
+            console.log('🔍 Database Connection Config:', {
+                host: config.host,
+                port: config.port,
+                database: config.database,
+                user: config.user
             });
 
+            this.client = new Client(config);
             await this.client.connect();
             console.log('✅ Connected to PostgreSQL database');
             return this.client;
@@ -39,12 +47,7 @@ class Database {
         }
     }
 
-    /**
-     * Query user by email and password
-     * @param {string} email - User email/username
-     * @param {string} password - User password
-     * @returns {Promise<Array>} Array of matching users
-     */
+
     async queryUser(email, password) {
         if (!this.client) {
             throw new Error('Database not connected. Call connect() first.');
@@ -59,11 +62,7 @@ class Database {
         }
     }
 
-    /**
-     * Get user by email only
-     * @param {string} email - User email/username
-     * @returns {Promise<Array>} Array of matching users
-     */
+
     async getUserByEmail(email) {
         if (!this.client) {
             throw new Error('Database not connected. Call connect() first.');
@@ -78,15 +77,7 @@ class Database {
         }
     }
 
-    /**
-     * Insert a new user into the database
-     * @param {Object} userData - User data object
-     * @param {string} userData.email - User email
-     * @param {string} userData.password - User password
-     * @param {string} userData.firstName - User first name
-     * @param {string} userData.lastName - User last name
-     * @returns {Promise<Object>} Inserted user record
-     */
+
     async insertUser(userData) {
         if (!this.client) {
             throw new Error('Database not connected. Call connect() first.');
@@ -110,12 +101,6 @@ class Database {
         }
     }
 
-    /**
-     * Execute a custom SQL query
-     * @param {string} query - SQL query string
-     * @param {Array} params - Query parameters
-     * @returns {Promise<Object>} Query result
-     */
     async query(query, params = []) {
         if (!this.client) {
             throw new Error('Database not connected. Call connect() first.');
@@ -129,10 +114,6 @@ class Database {
         }
     }
 
-    /**
-     * Get the database client (for advanced operations)
-     * @returns {Client} PostgreSQL client instance
-     */
     getClient() {
         if (!this.client) {
             throw new Error('Database not connected. Call connect() first.');

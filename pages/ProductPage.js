@@ -13,7 +13,7 @@ class ProductPage extends BasePage {
     if (await this.isVisible(sortDropdown)) {
       try {
         await this.click(sortDropdown);
-        await this.selectOption(sortDropdown, { index: 7 });  //?
+        await this.selectOption(sortDropdown, { index: 7 }); 
       }
       catch (error) {
       }

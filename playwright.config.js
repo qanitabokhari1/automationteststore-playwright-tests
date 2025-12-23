@@ -4,9 +4,7 @@ const dotenv = require('dotenv'); // Import dotenv to manage environment variabl
 // Load environment variables from the .env file
 dotenv.config();
 
-/**
- * Read environment variables with defaults
- */
+
 // Define the Base URL for the application under test, defaulting to automationteststore.com
 const BASE_URL = process.env.BASE_URL || 'https://automationteststore.com/';
 
@@ -17,8 +15,6 @@ const NAVIGATION_TIMEOUT = parseInt(process.env.NAVIGATION_TIMEOUT || '30000');
 // Set the overall timeout for each test case
 const TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || '30000');
 
-// Check if the current environment is a Continuous Integration server
-const IS_CI = !!process.env.CI;
 
 // Export the configuration object for Playwright
 module.exports = defineConfig({
@@ -26,12 +22,6 @@ module.exports = defineConfig({
   testDir: './tests',
   // Run tests in files in parallel to save time
   fullyParallel: true,
-  // Prevent accidentally running only one test in CI (fails the build)
-  forbidOnly: IS_CI,
-  // Number of retries for failed tests (higher on CI for stability)
-  retries: IS_CI ? 2 : 0,
-  // Number of parallel worker processes (limited to 1 on CI)
-  workers: IS_CI ? 1 : undefined,
   // Configuration for various test reporters
   reporter: [
     ['html'], // Generates a standard HTML report
