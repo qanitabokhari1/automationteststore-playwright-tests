@@ -263,14 +263,8 @@ BROWSER=all npx playwright test
 ### Selector Strategy
 - XPath selectors for Scenarios 1, 3, 4
 - CSS selectors for Scenario 2
-- Centralized in `utils/selectors.js`
 
 ## 🐛 Troubleshooting
-
-### Element Not Found
-- Check if page structure changed
-- Verify selectors in `utils/selectors.js`
-- Increase timeout in `.env` file
 
 ### Timeout Errors
 - Increase `ACTION_TIMEOUT` or `NAVIGATION_TIMEOUT` in `.env`
