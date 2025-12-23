@@ -19,6 +19,7 @@ test.describe('Scenario 2: T-shirts and Shoes Shopping Flow', () => {
     try {
       
       await loginPage.navigateToLogin();
+      
       await loginPage.login(username, password);
 
       await homePage.navigateToApparelSection();

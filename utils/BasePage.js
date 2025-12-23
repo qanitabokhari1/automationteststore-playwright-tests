@@ -1,139 +1,209 @@
+// Import Page and Locator types from Playwright Test
+// These are mainly useful for documentation, IntelliSense, and type clarity
 const { Page, Locator } = require('@playwright/test');
 
-
-//typescript extra remove
-
+// BasePage class
+// This acts as a parent class for all page objects in your framework
+// It contains reusable helper methods for common page actions
 class BasePage {
+
+  // Constructor runs when a new instance of BasePage (or child class) is created
+  // It receives the Playwright 'page' object from the test
   constructor(page) {
+    // Store the page instance so it can be used across all methods
     this.page = page;
   }
 
   /**
    * Click on an element
-   * Auto-waits for element to be ready (attached, visible, stable, enabled)
+   * Playwright automatically waits for:
+   * - element to be attached to DOM
+   * - visible
+   * - enabled
+   * - stable (not moving)
    */
   async click(locator) {
-    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    // If locator is a string (CSS/XPath), convert it into a Playwright locator
+    // Otherwise, assume it is already a Locator object
+    const element =
+      typeof locator === 'string'
+        ? this.page.locator(locator)
+        : locator;
+
+    // Perform the click action
     await element.click();
   }
 
   /**
    * Fill an input field
-   * Auto-waits for element to be ready before filling
+   * Automatically clears the field before typing
+   * Auto-waits for the element to be ready
    */
   async fill(locator, value) {
-    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    // Convert string selector into locator if needed
+    const element =
+      typeof locator === 'string'
+        ? this.page.locator(locator)
+        : locator;
+
+    // Fill the input with the provided value
     await element.fill(value);
   }
 
   /**
-   * Select an option from a dropdown
-   * Auto-waits for element to be ready before selecting
+   * Select an option from a dropdown (<select>)
+   * Auto-waits until the dropdown is ready
    */
   async selectOption(locator, value) {
-    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    // Resolve locator whether string or Locator object
+    const element =
+      typeof locator === 'string'
+        ? this.page.locator(locator)
+        : locator;
+
+    // Select the option by value, label, or index
     await element.selectOption(value);
   }
 
   /**
    * Get text content from an element
-   * Auto-waits for element to be ready before extracting text
+   * Returns the raw text inside the element
    */
   async getText(locator) {
-    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    // Resolve locator
+    const element =
+      typeof locator === 'string'
+        ? this.page.locator(locator)
+        : locator;
+
+    // Extract and return the text content
     return await element.textContent();
   }
 
   /**
-   * Check if element is visible
-   * Auto-waits for element to be ready before checking visibility
+   * Check whether an element is visible on the page
+   * Returns true or false
    */
   async isVisible(locator) {
-    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    // Resolve locator
+    const element =
+      typeof locator === 'string'
+        ? this.page.locator(locator)
+        : locator;
+
+    // Check visibility
     return await element.isVisible();
   }
 
   /**
-   * Scroll element into view if needed
-   * Auto-waits and scrolls if element is not in viewport
+   * Scroll element into the viewport if it is not already visible
+   * Useful for elements below the fold
    */
   async scrollIntoView(locator) {
-    const element = typeof locator === 'string' ? this.page.locator(locator) : locator;
+    // Resolve locator
+    const element =
+      typeof locator === 'string'
+        ? this.page.locator(locator)
+        : locator;
+
+    // Scroll the element into view if needed
     await element.scrollIntoViewIfNeeded();
   }
 
   /**
-   * Get a locator (useful for chaining operations)
+   * Return a Playwright locator
+   * Useful when chaining actions in page objects
    */
   locator(selector) {
+    // Create and return a locator using the provided selector
     return this.page.locator(selector);
   }
 
   /**
-   * Get element by role (semantic locator)
+   * Get element using ARIA role
+   * Recommended by Playwright for stable and accessible selectors
    */
   getByRole(role, options) {
+    // Example: getByRole('button', { name: 'Save' })
     return this.page.getByRole(role, options);
   }
 
   /**
-   * Get element by text
+   * Get element by visible text
    */
   getByText(text, options) {
+    // Example: getByText('Submit')
     return this.page.getByText(text, options);
   }
 
   /**
-   * Get element by label
+   * Get element by associated label text
+   * Commonly used for form inputs
    */
   getByLabel(text, options) {
+    // Example: getByLabel('Email')
     return this.page.getByLabel(text, options);
   }
 
   /**
-   * Navigation helpers
-   * @param {string} url - The URL to navigate to
-   * @param {object} options - Navigation options
-   * @param {string} options.waitUntil - When to consider navigation successful: 'load' | 'domcontentloaded' | 'networkidle' | 'commit'
-   * @param {number} options.timeout - Maximum navigation time in milliseconds (default: 60000)
+   * Navigate to a specific URL
+   * Supports custom navigation options
+   *
+   * @param {string} url - URL to navigate to
+   * @param {object} options - Optional navigation settings
    */
   async navigateTo(url, options = {}) {
+    // Default navigation behavior
     const defaultOptions = {
-      waitUntil: 'commit', // Only wait for navigation to start, not for resources
-      timeout: 90000,
+      // 'commit' waits only until navigation starts
+      // This makes navigation faster and avoids waiting for all resources
+      waitUntil: 'commit',
+
+      // Maximum wait time for navigation
+      timeout: 30000,
     };
 
+    // Merge default options with user-provided options
     const mergedOptions = { ...defaultOptions, ...options };
+
+    // Navigate to the given URL
     await this.page.goto(url, mergedOptions);
   }
 
   /**
-   * Wait for page load state
+   * Wait for the page to reach a specific load state
+   * Default is 'networkidle' (no network requests for 500ms)
    */
   async waitForLoadState(state = 'networkidle') {
+    // Pause execution until the desired load state is reached
     await this.page.waitForLoadState(state);
   }
 
   /**
-   * Wait for selector (use sparingly - prefer auto-waiting)
+   * Explicitly wait for a selector
+   * Should be used sparingly since Playwright auto-waits by default
    */
   async waitForSelector(selector, options) {
+    // Wait until the selector meets the provided conditions
     await this.page.waitForSelector(selector, options);
   }
 
   /**
-   * Get current URL
+   * Get the current page URL
    */
   getUrl() {
+    // Return the current browser URL
     return this.page.url();
   }
 
   /**
-   * Get page title
+   * Get the page title
    */
   async getTitle() {
+    // Return the page title text
     return await this.page.title();
   }
 }
 
+// Export BasePage so it can be extended by other page classes
 module.exports = { BasePage };

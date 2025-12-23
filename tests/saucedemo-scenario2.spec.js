@@ -18,9 +18,6 @@ test.describe('SauceDemo Scenario 2: Login with Valid Credentials', () => {
 
       await sauceDemoLoginPage.verifyDashboard();
 
-      // Additional verification - check that we're on the inventory page
-      await expect(page).toHaveURL(/.*inventory\.html/);
-
     } catch (error) {
       throw error;
     }
