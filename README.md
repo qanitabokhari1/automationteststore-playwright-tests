@@ -312,4 +312,3 @@ npx playwright test tests/scenario1.spec.js --debug
 
 ---
 
-**Note**: This framework demonstrates modern web automation best practices with both traditional and BDD testing approaches.
