@@ -1,3 +1,4 @@
+const { expect } = require('@playwright/test');
 const { BasePage } = require('../utils/BasePage');
 
 class MenPage extends BasePage {
