@@ -1,5 +1,5 @@
-import { When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+const { When, Then } = require('@cucumber/cucumber');
+const { expect } = require('@playwright/test');
 
 let totalProducts = 0;
 let saleItemsCount = 0;
@@ -104,7 +104,7 @@ When('I add available sale items to the cart', async function() {
 
 Then('I should see the cart contains the added sale items', async function() {
   const page = this.page;
-  const cartPage = (this as any).cartPage;
+  const cartPage = this.cartPage;
   
   console.log('\n=== Step 5: Verifying cart contents ===');
   
